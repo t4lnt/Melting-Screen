@@ -41,6 +41,24 @@ LRESULT CALLBACK Melt(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
+int APIENTRY main(HINSTANCE inst, HINSTANCE prev, LPSTR cmd, int showCmd) {
+	Width = GetSystemMetrics(SM_CXSCREEN);
+	Height = GetSystemMetrics(SM_CYSCREEN);
+	WNDCLASS wndClass = {0, Melt, 0, 0, inst, 0, LoadCursor(0, IDC_ARROW), 0, 0, L"ScreenMelting"};
+	if (RegisterClass(&wndClass)) {
+		HWND hWnd = CreateWindowExA(WS_EX_TOPMOST, "ScreenMelting", 0, WS_POPUP, 0, 0, Width, Height, HWND_DESKTOP, 0, inst, 0);
+		if (hWnd) {
+			srand(GetTickCount());
+			MSG msg = { 0 };
+			while (msg.message != WM_QUIT) {
+				if (PeekMessage(&msg, 0, 0, 0, PM_REMOVE)) {
+					TranslateMessage(&msg);
+					DispatchMessage(&msg);
+				}
+			}
+		}
+	}
+}
 
 
 
